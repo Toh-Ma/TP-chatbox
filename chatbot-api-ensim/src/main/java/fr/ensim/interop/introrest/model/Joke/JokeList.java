@@ -47,6 +47,7 @@ public class JokeList {
         return jokes.get(id).getData();
     }
 
+    public Integer getNoteJoke(int id) { return jokes.get(id).getNote();}
     /**
      * Méthode qui renvoie une blague.
      */
