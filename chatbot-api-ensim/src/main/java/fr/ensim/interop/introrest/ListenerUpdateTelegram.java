@@ -41,7 +41,7 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 						MessageRestController.sendMessage(jokes.getDataJoke(nAlea), response.get(0).getMessage().getChatId().toString());
 					}
 					//Si on inscrit "blague nulle" dans le chat il renverra une blague aléatoirement dont la note est inférieure ou égale à 5
-					if(text.equals("blague nulle")){
+					else if(text.equals("blague nulle")){
 						JokeList jokes = new JokeList();
 						int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
 						while(jokes.getNoteJoke(nAlea) > 5){
@@ -50,7 +50,7 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 						MessageRestController.sendMessage(jokes.getDataJoke(nAlea), response.get(0).getMessage().getChatId().toString());
 					}
 					//Si on inscrit "blague bien" dans le chat il renverra une blague aléatoirement dont la note est suppérieure à 5
-					if(text.equals("blague bien")){
+					else if(text.equals("blague bien")){
 						JokeList jokes = new JokeList();
 						int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
 						while(jokes.getNoteJoke(nAlea) < 5){
