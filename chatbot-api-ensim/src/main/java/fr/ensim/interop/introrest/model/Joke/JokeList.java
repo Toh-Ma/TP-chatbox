@@ -1,11 +1,11 @@
-package fr.ensim.interop.introrest;
+package fr.ensim.interop.introrest.model.Joke;
 
 import java.util.ArrayList;
 
 public class JokeList {
     // liste de blagues
     ArrayList<Joke> jokes = new ArrayList<Joke>();
-    JokeList(){
+    public JokeList(){
 
         jokes.add(new Joke("La vitamine C...\n" +
                 "\n" +
@@ -41,10 +41,17 @@ public class JokeList {
                 "Je me fichier.", 7, 11));
     }
 
+    //String dataJoke = jokes.get(0).getData();
+
+    public String getDataJoke(int id){
+        return jokes.get(id).getData();
+    }
+
     /**
      * Méthode qui renvoie une blague.
      */
     public ArrayList<Joke> getJokes(){
         return jokes;
     }
+
 }
