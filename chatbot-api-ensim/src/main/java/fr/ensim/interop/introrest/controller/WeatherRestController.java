@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -27,12 +28,14 @@ public class WeatherRestController {
     @GetMapping("/weather")
     public static ResponseEntity<Forecast> getWeatherForecast(@RequestParam("city") String city){
         final String query = apiUrl + "weather?q=" + city +"&appid="+ apiToken +"&units=metric";
-        Forecast forecast = restTemplate.getForObject(query, Forecast.class);
-//        ResponseEntity <Forecast> forecast = restTemplate.getForEntity(query, Forecast.class);
+        try {
+            Forecast forecast = restTemplate.getForObject(query, Forecast.class);
+            return ResponseEntity.ok().body(forecast);
+        }catch (HttpStatusCodeException exception){
+            return null;
+        }
 
-
-        forecast.setCity(city);
-        return ResponseEntity.ok().body(forecast);
+//        return ResponseEntity.ok().body(forecast);
     }
 
 

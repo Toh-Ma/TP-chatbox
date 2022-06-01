@@ -3,9 +3,9 @@ package fr.ensim.interop.introrest.model.weather;
 import java.util.List;
 
 public class Forecast {
-    private String city;
+    private String name;
     private Main main;
-    private List<model.apoen.weather.Weather> weather;
+    private List<Weather> weather;
     private Wind wind;
 
     public Forecast() {
@@ -13,7 +13,7 @@ public class Forecast {
 
     @Override
     public String toString() {
-        return "Today weather in " + city + " :\n\n" +
+        return "Today weather in " + name + " :\n\n" +
                 "-Weather : " + weather.get(0).getDescription() +
                 "\n-Temperature : " + main.getTemp() + "°C" +
                 "\n-Minimum temperature : " + main.getTemp_min() + "°C" +
@@ -30,11 +30,11 @@ public class Forecast {
         this.main = main;
     }
 
-    public List<model.apoen.weather.Weather> getWeather() {
+    public List<Weather> getWeather() {
         return weather;
     }
 
-    public void setWeeather(List<model.apoen.weather.Weather> weather) {
+    public void setWeeather(List<Weather> weather) {
         this.weather = weather;
     }
 
@@ -46,11 +46,11 @@ public class Forecast {
         this.wind = wind;
     }
 
-    public String getCity() {
-        return city;
+    public String getName() {
+        return name;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setName(String name) {
+        this.name = name;
     }
 }
