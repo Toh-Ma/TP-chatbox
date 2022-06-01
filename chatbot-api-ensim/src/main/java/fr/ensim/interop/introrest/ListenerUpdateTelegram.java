@@ -29,51 +29,79 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-
+				//récupérer les derniers messages envoyés au bot
 				ResponseEntity<ApiResponseUpdateTelegram> responseTelegram = MessageRestController.getUpdate();
 				List<Update> response = responseTelegram.getBody().getResult();
 
 				if(response.size()>0){
-					String request =response.get(0).getMessage().getText();
+					String request = response.get(0).getMessage().getText();		//récupérer le message envoyé par l'utilisateur
 					String[] splitRequest = request.split(" ", 2);		//sépare le premier terme de la commande voulue pour la traiter séparément
+					String chatId = response.get(0).getMessage().getChatId().toString();	//récupérer l'id du chat où renvoyer la réponse de la requête
 
-					//Si on inscrit "blague" dans le chat il renverra une blague aléatoirement
-					if(request.equals("blague")){
-						JokeList jokes = new JokeList();
-						int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-						MessageRestController.sendMessage(jokes.getDataJoke(nAlea), response.get(0).getMessage().getChatId().toString());
-					}
-					//Si on inscrit "blague nulle" dans le chat il renverra une blague aléatoirement dont la note est inférieure ou égale à 5
-					else if(request.equals("blague nulle")){
-						JokeList jokes = new JokeList();
-						int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-						while(jokes.getNoteJoke(nAlea) > 5){
-							nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+					//traitement de la requete "blague"
+					if (splitRequest[0].equals("blague")){
+						//Si on inscrit seulement "blague" dans le chat il renverra une blague aléatoirement
+						if (splitRequest.length == 1){
+							JokeList jokes = new JokeList();
+							int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+							MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
 						}
-						MessageRestController.sendMessage(jokes.getDataJoke(nAlea), response.get(0).getMessage().getChatId().toString());
-					}
-					//Si on inscrit "blague bien" dans le chat il renverra une blague aléatoirement dont la note est suppérieure à 5
-					else if(request.equals("blague bien")){
-						JokeList jokes = new JokeList();
-						int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-						while(jokes.getNoteJoke(nAlea) < 5){
-							nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+						//traitement des option de la blague voulue indiquée dans la requête
+						else {
+							//Si on inscrit "blague nulle" dans le chat il renverra une blague aléatoirement dont la note est inférieure ou égale à 5
+							if (splitRequest[1].equals("nulle")){
+								JokeList jokes = new JokeList();
+								int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+								while(jokes.getNoteJoke(nAlea) > 5){
+									nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+								}
+								MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
+							}
+
+							//Si on inscrit "blague bien" dans le chat il renverra une blague aléatoirement dont la note est suppérieure à 5
+							else if (splitRequest[1].equals("bien")){
+								JokeList jokes = new JokeList();
+								int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+								while(jokes.getNoteJoke(nAlea) < 5){
+									nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
+								}
+								MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
+							}
 						}
-						MessageRestController.sendMessage(jokes.getDataJoke(nAlea), response.get(0).getMessage().getChatId().toString());
 					}
 
-					if (splitRequest[0].equals("meteo")) {
-						System.out.println("VILE ==> " + splitRequest[1]);
+					//traitement de la requete "meteo"
+					else if (splitRequest[0].equals("meteo")) {
+						//si aucune ville n'est mentionnée dans la requête, le bot renvoit par défaut la météo du Mans
+						if (splitRequest.length < 2){
+							ResponseEntity<Forecast> forecast = WeatherRestController.getWeatherForecast("Le Mans");
+							MessageRestController.sendMessage(forecast.getBody().toString(), chatId);
+						}
+						else {
+							//si la ville n'est pas reconnue, getWeatherForecast() renvoit null
+							ResponseEntity<Forecast> forecast = WeatherRestController.getWeatherForecast(splitRequest[1]);
 
-						ResponseEntity<Forecast> forecast = WeatherRestController.getWeatherForecast(splitRequest[1]);
+							if (forecast == null)
+								MessageRestController.sendMessage("Erreur : la ville saisie n'est pas reconnue", chatId);
+							else
+								MessageRestController.sendMessage(forecast.getBody().toString(), chatId);
+						}
 
-						if (forecast == null)
-							MessageRestController.sendMessage("Erreur : la ville saisie n'est pas reconnue", response.get(0).getMessage().getChatId().toString());
-						else
-							MessageRestController.sendMessage(forecast.getBody().toString(), response.get(0).getMessage().getChatId().toString());
 
 					}
 
+					//message d'erreur si la requete n'est pas reconnue
+					else {
+						MessageRestController.sendMessage("Commande non-reconnue. Veuillez utiliser l'une de ces commandes : \n\n" +
+										"blague \n" +
+										"blague bien \n" +
+										"blague nulle\n" +
+										"meteo \n" +
+										"meteo ville_à_saisir"
+							, chatId);
+					}
+
+					//mettre à jour les message obtenue par getUpdate pour ne recevoir que les nouveaux messages
 					MessageRestController.deleteUpdate((response.get(response.size()-1).getUpdateId()+1));
 				}
 

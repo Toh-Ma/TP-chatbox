@@ -13,7 +13,7 @@ public class Forecast {
 
     @Override
     public String toString() {
-        return "Today weather in " + name + " :\n\n" +
+        return "Today's weather in " + name + " :\n\n" +
                 "-Weather : " + weather.get(0).getDescription() +
                 "\n-Temperature : " + main.getTemp() + "°C" +
                 "\n-Minimum temperature : " + main.getTemp_min() + "°C" +
