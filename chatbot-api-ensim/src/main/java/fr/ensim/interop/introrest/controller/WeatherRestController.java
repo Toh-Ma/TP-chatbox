@@ -34,8 +34,6 @@ public class WeatherRestController {
         }catch (HttpStatusCodeException exception){
             return null;
         }
-
-//        return ResponseEntity.ok().body(forecast);
     }
 
 
