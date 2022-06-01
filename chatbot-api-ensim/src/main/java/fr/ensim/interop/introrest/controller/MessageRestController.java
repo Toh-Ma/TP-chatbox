@@ -12,33 +12,49 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class MessageRestController {
-	
+	private static String telegramApiUrl, telegramToken;
+
+	//récupérer l'url et le token de l'api telegram enregistré dans application.properties
 	@Value("${telegram.api.url}")
-	private String telegramApiUrl;
+	public void setUrl(String url){
+		MessageRestController.telegramApiUrl = url;
+	}
 
-	//Token: 5348334660:AAGeyqcd-6MqfuhFhElqoZYsjKCHeboiQZM
-	//Opérations sur la ressource Message
+	@Value("${telegram.bot.id}")
+	public void setToken(String token){
+		MessageRestController.telegramToken = token;
+	}
 
+	static RestTemplate restTemplate = new RestTemplate();
+
+	//recevoir les derniers messages obtenus par le bot
 	@GetMapping
 	public static ResponseEntity<ApiResponseUpdateTelegram> getUpdate(){
-		RestTemplate restTemplate = new RestTemplate();
-		ApiResponseUpdateTelegram update = restTemplate.getForObject("https://api.telegram.org/bot5348334660:AAGeyqcd-6MqfuhFhElqoZYsjKCHeboiQZM/getUpdates",
-				ApiResponseUpdateTelegram.class);
+		String query = telegramApiUrl + "bot"+ telegramToken +"/getUpdates";
+		ApiResponseUpdateTelegram update = restTemplate.getForObject( query, ApiResponseUpdateTelegram.class);
+
 		return ResponseEntity.ok().body(update);
 	}
 
+	//Envoyer un message à une personne avec son chat_id
 	@PostMapping("/sendMessage")
 	public static ResponseEntity<ApiResponseTelegram> sendMessage(@RequestParam("text") String text, @RequestParam("chat_id") String chat_id) {
-		RestTemplate restTemplate = new RestTemplate();
-		ApiResponseTelegram sendMessage = restTemplate.getForObject("https://api.telegram.org/bot5348334660:AAGeyqcd-6MqfuhFhElqoZYsjKCHeboiQZM/sendMessage?text={text}"+"&chat_id={chat_id}",
+		String query = telegramApiUrl + "bot"+ telegramToken;
+		ApiResponseTelegram sendMessage = restTemplate.getForObject(query +"/sendMessage?text={text}&chat_id={chat_id}",
 				ApiResponseTelegram.class,text,chat_id);
+
 		return ResponseEntity.ok().body(sendMessage);
 	}
 
+
+
 	@PostMapping("/deleteUpdate")
 	public static ResponseEntity<ApiResponseTelegram> deleteUpdate(@RequestParam("offset") int offset) {
-		RestTemplate restTemplate = new RestTemplate();
-		ApiResponseTelegram deleteUpdate = restTemplate.getForObject("https://api.telegram.org/bot5348334660:AAGeyqcd-6MqfuhFhElqoZYsjKCHeboiQZM/getupdates?offset={offset}",ApiResponseTelegram.class,offset);
+		String query = telegramApiUrl + "bot"+ telegramToken + "/getupdates?offset=" + offset;
+		ApiResponseTelegram deleteUpdate = restTemplate.getForObject(query, ApiResponseTelegram.class,offset);
 		return ResponseEntity.ok().body(deleteUpdate);
 	}
+
+
+
 }
