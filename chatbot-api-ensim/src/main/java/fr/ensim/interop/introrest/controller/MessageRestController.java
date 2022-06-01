@@ -38,21 +38,21 @@ public class MessageRestController {
 
 	//Envoyer un message à une personne avec son chat_id
 	@PostMapping("/sendMessage")
-	public static ResponseEntity<ApiResponseTelegram> sendMessage(@RequestParam("text") String text, @RequestParam("chat_id") String chat_id) {
+	public static void sendMessage(@RequestParam("text") String text, @RequestParam("chat_id") String chat_id) {
 		String query = telegramApiUrl + "bot"+ telegramToken;
 		ApiResponseTelegram sendMessage = restTemplate.getForObject(query +"/sendMessage?text={text}&chat_id={chat_id}",
 				ApiResponseTelegram.class,text,chat_id);
 
-		return ResponseEntity.ok().body(sendMessage);
+//		return ResponseEntity.ok().body(sendMessage);
 	}
 
 
 
 	@PostMapping("/deleteUpdate")
-	public static ResponseEntity<ApiResponseTelegram> deleteUpdate(@RequestParam("offset") int offset) {
+	public static void deleteUpdate(@RequestParam("offset") int offset) {
 		String query = telegramApiUrl + "bot"+ telegramToken + "/getupdates?offset=" + offset;
 		ApiResponseTelegram deleteUpdate = restTemplate.getForObject(query, ApiResponseTelegram.class,offset);
-		return ResponseEntity.ok().body(deleteUpdate);
+//		return ResponseEntity.ok().body(deleteUpdate);
 	}
 
 

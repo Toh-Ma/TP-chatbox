@@ -67,6 +67,8 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 								}
 								MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
 							}
+
+							else MessageRestController.sendMessage("Commande non reconnue", chatId);
 						}
 					}
 
