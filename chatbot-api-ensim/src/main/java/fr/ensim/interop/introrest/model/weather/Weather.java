@@ -4,8 +4,13 @@ public class Weather {
     private String main;
     private String description;
 
-    public Weather() {
-    }
+    public String getIcon() { return icon;}
+
+    public void setIcon(String icon) { this.icon = icon;}
+
+    private String icon;
+
+    public Weather() {}
 
     public String getMain() {
         return main;
