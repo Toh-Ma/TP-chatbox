@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class JokeList {
     // liste de blagues
     ArrayList<Joke> jokes = new ArrayList<Joke>();
+    ArrayList<Joke> goodJokes = new ArrayList<Joke>();
+    ArrayList<Joke> badJokes = new ArrayList<Joke>();
+
+
     public JokeList(){
 
         jokes.add(new Joke("La vitamine C...\n" +
@@ -39,9 +43,16 @@ public class JokeList {
         jokes.add(new Joke("Que dit un informaticien quand il s'ennuie ?\n" +
                 "\n" +
                 "Je me fichier.", 7, 11));
+
+
+        for (Joke joke: jokes) {
+            if (joke.getNote() > 5)
+                goodJokes.add(joke);
+            else
+                badJokes.add(joke);
+        }
     }
 
-    //String dataJoke = jokes.get(0).getData();
 
     public String getDataJoke(int id){
         return jokes.get(id).getData();
@@ -53,6 +64,22 @@ public class JokeList {
      */
     public ArrayList<Joke> getJokes(){
         return jokes;
+    }
+
+    public ArrayList<Joke> getGoodJokes() {
+        return goodJokes;
+    }
+
+    public void setGoodJokes(ArrayList<Joke> goodJokes) {
+        this.goodJokes = goodJokes;
+    }
+
+    public ArrayList<Joke> getBadJokes() {
+        return badJokes;
+    }
+
+    public void setBadJokes(ArrayList<Joke> badJokes) {
+        this.badJokes = badJokes;
     }
 
 }

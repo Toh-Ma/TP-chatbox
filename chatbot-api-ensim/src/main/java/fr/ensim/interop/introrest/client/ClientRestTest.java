@@ -1,9 +1,12 @@
 package fr.ensim.interop.introrest.client;
 
+import fr.ensim.interop.introrest.model.Joke.JokeList;
+
 public class ClientRestTest {
 	
 	public static void main(String[] args) {
-	
-		//Vous pouvez faire des tests d'appels d'API ici
+
+		JokeList list = new JokeList();
+		System.out.println("here");
 	}
 }
