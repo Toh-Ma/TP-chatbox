@@ -19,15 +19,29 @@ import java.util.logging.Logger;
 
 @Component
 public class ListenerUpdateTelegram implements CommandLineRunner {
-	JokeList jokeList = new JokeList();
+	static JokeList jokeList = new JokeList();
+
+	public static JokeList getJokeList() {
+		return jokeList;
+	}
+
+	public static void setJokeList(JokeList jokeList) {
+		ListenerUpdateTelegram.jokeList = jokeList;
+	}
+
 
 	@Override
 	public void run(String... args) throws Exception {
 		Logger.getLogger("ListenerUpdateTelegram").log(Level.INFO, "Démarage du listener d'updates Telegram...");
 
+
+
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
+				System.out.println(jokeList.getJokes().get(jokeList.getJokes().size()-1).getData());
+
+
 				//récupérer les derniers messages envoyés au bot
 				ResponseEntity<ApiResponseUpdateTelegram> responseTelegram = MessageRestController.getUpdate();
 				List<Update> response = responseTelegram.getBody().getResult();

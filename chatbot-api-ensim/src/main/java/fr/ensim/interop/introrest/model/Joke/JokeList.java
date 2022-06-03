@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class JokeList {
     // liste de blagues
-    ArrayList<Joke> jokes = new ArrayList<Joke>();
+    private static ArrayList<Joke> jokes = new ArrayList<Joke>();
     ArrayList<Joke> goodJokes = new ArrayList<Joke>();
     ArrayList<Joke> badJokes = new ArrayList<Joke>();
 
@@ -54,6 +54,15 @@ public class JokeList {
     }
 
 
+    public void addJoke(Joke joke){
+        jokes.add(joke);
+
+        if (joke.getNote() > 5)
+            goodJokes.add(joke);
+        else
+            badJokes.add(joke);
+    }
+
     //Retourne une blague aléatoire dans la liste jokes
     public Joke getRandomJoke(){
         int randomId = 0 + (int)(Math.random() * ((jokes.size() - 1) + 1));
@@ -61,7 +70,7 @@ public class JokeList {
     }
 
     //Retourne une blague aléatoire dans la liste goodJokes
-    public Joke getRandomGoodJoke(){
+    public Joke  getRandomGoodJoke(){
         int randomId = 0 + (int)(Math.random() * ((goodJokes.size() - 1) + 1));
         return goodJokes.get(randomId);
     }

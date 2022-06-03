@@ -11,7 +11,6 @@ public class Joke{
     private Integer note;
     private Integer id;
 
-    public static ArrayList<String>[] args;
 
     public void setData(String data) {
         this.data = data;
@@ -36,7 +35,6 @@ public class Joke{
     public Integer getId() { return id; }
     
     public Joke(String data, Integer note, Integer id) {
-        super();
         this.id=id;
         this.data=data;
         this.note=note;

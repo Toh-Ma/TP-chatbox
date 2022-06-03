@@ -1,20 +1,24 @@
 package fr.ensim.interop.introrest.controller;
 
+import fr.ensim.interop.introrest.ListenerUpdateTelegram;
 import fr.ensim.interop.introrest.model.Joke.Joke;
 import fr.ensim.interop.introrest.model.Joke.JokeList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class JokeRestController {
-    private JokeList list = new JokeList();
+//    private JokeList list = new JokeList();
+    JokeList list = ListenerUpdateTelegram.getJokeList();
 
     //retourne une blague aléatoire dans goodJokes ou badJokes selon le paramètre
     @GetMapping("/joke")
     public ResponseEntity<Joke> getRandomJoke(@RequestParam("type") String type){
+
         if (type.equals("bien"))
             return ResponseEntity.ok().body(list.getRandomGoodJoke());
         else if (type.equals("nulle"))
@@ -28,5 +32,12 @@ public class JokeRestController {
     @GetMapping("/randomJoke")
     public ResponseEntity<Joke> getRandomJoke(){
         return ResponseEntity.ok().body(list.getRandomJoke());
+    }
+
+    @PostMapping("/addJoke")
+    public ResponseEntity<Joke> addJoke(@RequestParam("content") String content, @RequestParam("note") Integer note){
+        list.addJoke(new Joke(content, note, list.getJokes().size()));
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
