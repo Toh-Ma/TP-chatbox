@@ -34,14 +34,9 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Logger.getLogger("ListenerUpdateTelegram").log(Level.INFO, "Démarage du listener d'updates Telegram...");
 
-
-
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println(jokeList.getJokes().get(jokeList.getJokes().size()-1).getData());
-
-
 				//récupérer les derniers messages envoyés au bot
 				ResponseEntity<ApiResponseUpdateTelegram> responseTelegram = MessageRestController.getUpdate();
 				List<Update> response = responseTelegram.getBody().getResult();

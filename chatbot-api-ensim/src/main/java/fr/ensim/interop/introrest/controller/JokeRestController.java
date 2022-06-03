@@ -38,12 +38,23 @@ public class JokeRestController {
         return ResponseEntity.ok().body(list.getRandomJoke());
     }
 
-
-
+    //ajouter une blague dans la liste
     @PostMapping("/addJoke")
     public ResponseEntity<Joke> addJoke(@RequestParam("content") String content, @RequestParam("note") Integer note){
         list.addJoke(new Joke(content, note, list.getJokes().size()));
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    //retourne toutes les bonne blague
+    @GetMapping("/getGoodJokes")
+    public ResponseEntity<ArrayList<Joke>> getAllGoodJokes(){
+        return ResponseEntity.ok().body(list.getGoodJokes());
+    }
+
+    //retourne toutes les mauvaise blagues
+    @GetMapping("/getBadJokes")
+    public ResponseEntity<ArrayList<Joke>> getAllBadJokes(){
+        return ResponseEntity.ok().body(list.getBadJokes());
     }
 }
