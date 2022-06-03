@@ -14,12 +14,13 @@ public class Forecast {
     @Override
     public String toString() {
         return "Today's weather in " + name + " :\n\n" +
-                "-Weather : " + weather.get(0).getDescription() + weather.get(0).getIcon()+
+                "-Weather : " + weather.get(0).getDescription() +
                 "\n-Temperature : " + main.getTemp() + "°C" +
                 "\n-Minimum temperature : " + main.getTemp_min() + "°C" +
                 "\n-Maximum  : " + main.getTemp_max() + "°C" +
                 "\n-Humidity : " + main.getHumidity() + "%" +
-                "\n-Wind : " + wind.getSpeed() + " m/s at " + wind.getDeg() + "°";
+                "\n-Wind : " + wind.getSpeed() + " m/s at " + wind.getDeg() + "°" +
+                " http://openweathermap.org/img/wn/"+weather.get(0).getIcon()+"@4x.png";
     }
 
     public Main getMain() {
