@@ -1,2 +1,2 @@
 # TP chatbox
- TP noté intéropérabilité
+ TP noté intéropérabilité de Oussama BOUAZZA et Thomas BASTIDE.
