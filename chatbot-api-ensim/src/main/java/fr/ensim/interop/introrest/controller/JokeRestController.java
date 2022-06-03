@@ -5,10 +5,9 @@ import fr.ensim.interop.introrest.model.Joke.Joke;
 import fr.ensim.interop.introrest.model.Joke.JokeList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 public class JokeRestController {
@@ -28,11 +27,18 @@ public class JokeRestController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/allJoke")
+    public ResponseEntity<ArrayList<Joke>> getAllJoke(){
+            return ResponseEntity.ok().body(list.getJokes());
+    }
+
     //retourne une blague aléatoire de list
     @GetMapping("/randomJoke")
     public ResponseEntity<Joke> getRandomJoke(){
         return ResponseEntity.ok().body(list.getRandomJoke());
     }
+
+
 
     @PostMapping("/addJoke")
     public ResponseEntity<Joke> addJoke(@RequestParam("content") String content, @RequestParam("note") Integer note){
