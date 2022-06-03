@@ -7,6 +7,12 @@ public class ClientRestTest {
 	public static void main(String[] args) {
 
 		JokeList list = new JokeList();
-		System.out.println("here");
+
+		for (int i = 0; i < 20; i++) {
+			System.out.println(list.getRandomGoodJoke().getData());
+		}
+
+
+
 	}
 }

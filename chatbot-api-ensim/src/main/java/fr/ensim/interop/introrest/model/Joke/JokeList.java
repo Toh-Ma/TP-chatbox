@@ -54,6 +54,24 @@ public class JokeList {
     }
 
 
+    //Retourne une blague aléatoire dans la liste jokes
+    public Joke getRandomJoke(){
+        int randomId = 0 + (int)(Math.random() * ((jokes.size() - 1) + 1));
+        return jokes.get(randomId);
+    }
+
+    //Retourne une blague aléatoire dans la liste goodJokes
+    public Joke getRandomGoodJoke(){
+        int randomId = 0 + (int)(Math.random() * ((goodJokes.size() - 1) + 1));
+        return goodJokes.get(randomId);
+    }
+
+    //Retourne une blague aléatoire dans la liste badJokes
+    public Joke getRandomBadJoke(){
+        int randomId = 0 + (int)(Math.random() * ((badJokes.size() - 1) + 1));
+        return badJokes.get(randomId);
+    }
+
     public String getDataJoke(int id){
         return jokes.get(id).getData();
     }
