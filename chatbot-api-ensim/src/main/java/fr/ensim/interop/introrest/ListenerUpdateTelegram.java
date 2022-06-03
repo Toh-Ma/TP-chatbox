@@ -1,10 +1,9 @@
 package fr.ensim.interop.introrest;
 
 import fr.ensim.interop.introrest.controller.MessageRestController;
-//import fr.ensim.interop.introrest.controller.OpenWeatherRestController;
 import fr.ensim.interop.introrest.controller.WeatherRestController;
+import fr.ensim.interop.introrest.model.Joke.Joke;
 import fr.ensim.interop.introrest.model.Joke.JokeList;
-import fr.ensim.interop.introrest.model.telegram.ApiResponseTelegram;
 import fr.ensim.interop.introrest.model.telegram.ApiResponseUpdateTelegram;
 import fr.ensim.interop.introrest.model.telegram.Update;
 import fr.ensim.interop.introrest.model.weather.Forecast;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -21,6 +19,7 @@ import java.util.logging.Logger;
 
 @Component
 public class ListenerUpdateTelegram implements CommandLineRunner {
+	JokeList jokeList = new JokeList();
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -42,30 +41,21 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 					if (splitRequest[0].equals("blague")){
 						//Si on inscrit seulement "blague" dans le chat il renverra une blague aléatoirement
 						if (splitRequest.length == 1){
-							JokeList jokes = new JokeList();
-							int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-							MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
+							Joke randomJoke = jokeList.getRandomJoke();
+							MessageRestController.sendMessage(randomJoke.getData(), chatId);
 						}
 						//traitement des option de la blague voulue indiquée dans la requête
 						else {
 							//Si on inscrit "blague nulle" dans le chat il renverra une blague aléatoirement dont la note est inférieure ou égale à 5
 							if (splitRequest[1].equals("nulle")){
-								JokeList jokes = new JokeList();
-								int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-								while(jokes.getNoteJoke(nAlea) > 5){
-									nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-								}
-								MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
+								Joke randomBadJoke = jokeList.getRandomBadJoke();
+								MessageRestController.sendMessage(randomBadJoke.getData(), chatId);
 							}
 
 							//Si on inscrit "blague bien" dans le chat il renverra une blague aléatoirement dont la note est suppérieure à 5
 							else if (splitRequest[1].equals("bien")){
-								JokeList jokes = new JokeList();
-								int nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-								while(jokes.getNoteJoke(nAlea) < 5){
-									nAlea = 0 + (int)(Math.random() * ((jokes.getJokes().size() - 1) + 1));
-								}
-								MessageRestController.sendMessage(jokes.getDataJoke(nAlea), chatId);
+								Joke randomGoodJoke = jokeList.getRandomGoodJoke();
+								MessageRestController.sendMessage(randomGoodJoke.getData(), chatId);
 							}
 
 							else MessageRestController.sendMessage("Commande non reconnue", chatId);
